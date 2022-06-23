@@ -23,7 +23,7 @@ export const UserRegister = (username: string, password: string) => {
     return request<User>({
         url: '/user/register',
         method: 'POST',
-        params: { username, password }
+        data: { username, password }
     })
 }
 
