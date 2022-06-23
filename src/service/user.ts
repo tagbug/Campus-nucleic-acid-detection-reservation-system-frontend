@@ -39,3 +39,15 @@ export const UserUpdatePassword = (oriPassword: string, newPassword: string) => 
         params: { oriPassword, newPassword }
     })
 }
+
+/**
+ * 用户信息获取接口
+ * @param uid 用户id
+ */
+export const GetUserInfo = (uid: number) => {
+    return request<UserInfo>({
+        url: '/user/info',
+        method: 'GET',
+        params: { uid }
+    })
+}

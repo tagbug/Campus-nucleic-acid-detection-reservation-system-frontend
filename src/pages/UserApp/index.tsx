@@ -23,7 +23,7 @@ export const UserApp = React.memo(() => {
             <Outlet />
         </div>
         <div className="bottom">
-            <TabBar onChange={v => navigate(v)}>
+            <TabBar activeKey={global.location.pathname} onChange={v => navigate(v)}>
                 {tabItems.map(item => <TabBar.Item {...item} />)}
             </TabBar>
         </div>
@@ -45,24 +45,29 @@ const tabItems = [
 
 const AppContainer = styled.div`
     height: 100%;
-    display: flex;
-    flex-direction: column;
     background-color: #f5f5f5;
 
     .topBar {
-        flex: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10;
         border-bottom: 1px solid var(--adm-color-border);
+        background-color: #f5f5f5;
     }
 
     .body {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        min-height: 100%;        
+        padding-top: 46px;
+        padding-bottom: 50px;
     }
 
     .bottom {
-        flex: 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 10;
         border-top: 1px solid var(--adm-color-border);
+        background-color: #f5f5f5;
     }
 ` 
