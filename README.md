@@ -1,8 +1,71 @@
-# Getting Started with Create React App
+# cndrs-front
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-## Available Scripts
+这里是核算预约检测系统的前端仓库，项目使用[Create React App](https://github.com/facebook/create-react-app)脚手架创建。
+
+## 技术栈
+
+- 主框架/技术：React、TypeScript
+- 辅助：React-Hooks、React Router、Redux、Axios、Styled-Components
+- 组件库：Ant Design Mobile
+
+## 目录结构
+
+    ├───public          静态资源目录
+    ├───src             源码目录   
+        ├───global.css  全局CSS样式
+        ├───index.tsx   
+        │
+        ├───@types      全局type
+        ├───components  通用组件
+        ├───hooks       自定义Hooks
+        ├───pages       独立页面
+        │   ├───App
+        │   ├───Login
+        │   ├───ProjectEditor
+        │   ├───ProjectList
+        │   └───UserHome
+        ├───redux       redux逻辑
+        ├───route       路由
+        ├───service     网络接口
+        └───util        实用工具
+    
+## 统一代码风格
+
+1. 命名规范：
+  - 组件和路由页统一使用大驼峰命名，例如：components/NotFound.tsx 和 pages/Login/...
+  - 如果组件或路由页需要嵌套，则最外层使用大驼峰，例如：
+  
+        ├───pages       独立页面
+        │   ├───Login
+        │       ├───components
+        │       │   └───.....
+        │       └───index.tsx
+        
+  - 缩略词全大写，当位于开头且不需要导出时，使用全小写
+2. 接口调用：二次封装axios
+3. 通用的ts类型文件统一写在@types下
+4. 服务器执行请求失败的Error统一使用自定义的ExecuteError
+
+## 代码提交规范
+
+`<type>(<scope>): <subject>`
+- type 为必填项，用于指定 commit 的类型。
+- `build`：更改构建系统和外部依赖项（如将 gulp 改为 webpack ，更新某个npm包）
+- `ci`：对CI配置文件和脚本的更改
+- `docs`：仅仅修改文档说明
+- `feat`：增加一个新特性
+- `fix`：修复一个bug
+- `perf`：更改代码以提高性能
+- `refactor`：代码重构时使用
+- `style`：不影响代码含义的改动，例如去掉空格、改变缩进、增删分号
+- `test`：增加新的测试功能或更改原有的测试模块
+- `chore`：杂项
+- `revert`：回滚代码时使用
+
+## npm脚本
 
 In the project directory, you can run:
 
@@ -39,8 +102,13 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## 相关链接
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- React官方文档：https://react.docschina.org/
+- React(hooks)：https://react.docschina.org/docs/hooks-intro.html | https://beta.reactjs.org/
+- react-router：https://reactrouter.com/docs/en/v6/getting-started/tutorial
+- typescript：[TypeScript入门](https://ex4tjk8ii1.feishu.cn/docs/doccnE8fHbzDEgJNptmhz0suFZe)
+- create-react-app：https://create-react-app.dev/docs/getting-started
+- Style-components：https://styled-components.com/docs/basics#getting-started
+- axois：https://axios-http.com/zh/docs/example
+- Ant Design Mobile：https://mobile.ant.design/
