@@ -10,6 +10,7 @@ export const NotFound = React.memo(() => {
 
     return (
         <ErrorBlock
+            status="empty"
             description="您访问的页面不存在"
         >
             <Button color='primary' onClick={() => navigate(-1)} >

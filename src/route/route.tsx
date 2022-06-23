@@ -21,11 +21,14 @@ export const routeConfig: RouteObject[] = [
             },
             {
                 path: 'admin/',
-                element: <AdminApp />,
                 children: [
                     {
+                        path: 'index',
+                        element: <AdminApp />
+                    },
+                    {
                         path: '',
-                        element: <Navigate to="./manage" />
+                        element: <Navigate to="./index" />
                     },
                     {
                         path: '*',
@@ -39,7 +42,7 @@ export const routeConfig: RouteObject[] = [
                 children: [
                     {
                         path: '',
-                        element: <Navigate to="./appointment" />
+                        element: <Navigate to="./index" />
                     },
                     {
                         path: '*',
