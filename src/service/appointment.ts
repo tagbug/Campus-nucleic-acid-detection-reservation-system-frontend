@@ -31,3 +31,14 @@ export const addAppointment = (appointment: Appointment) => {
         data: appointment
     });
 }
+
+/**
+ * 分页查询完整预约记录
+ */
+export const getAppointmentList = (pageNum: number, pageSize: number) => { 
+    return request<PageData<AppointmentInfo>>({
+        url: '/appointment/queryFullList',
+        method: 'GET',
+        params: { pageNum, pageSize }
+    });
+}

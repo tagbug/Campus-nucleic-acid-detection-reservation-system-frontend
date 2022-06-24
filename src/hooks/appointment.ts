@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getSiteList, getSiteTimeRange } from "service/appointment";
+import { getAppointmentList, getSiteList, getSiteTimeRange } from "service/appointment";
 
 /**
  * 查询可用采样点
@@ -35,4 +35,44 @@ export const useSiteTimeRange = (siteId?: number) => {
     useEffect(refresh, [siteId]);
 
     return { timeRange, refresh };
+}
+
+
+/**
+ * 查询完整预约记录
+ */
+export const useAppointmentList = (initPageSize: number) => {
+    const [pageNum, setPageNum] = useState<number>(0);
+    const [appointmentList, setAppointmentList] = useState<AppointmentInfo[]>([]);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+
+    const load = async (pageNum: number, clear?: boolean) => {
+        try {
+            const data = (await getAppointmentList(pageNum || 1, initPageSize)).data;
+            if (clear) {
+                setAppointmentList(data.list);
+            } else {
+                // 注意防止重复请求导致的数据冗余，如果出现重复数据，用下面的代码
+                // setAppointmentList(list =>
+                //     [...list.filter(item => !data.list.find(i => i.time === item.time)), ...data.list]
+                // );
+                setAppointmentList(list =>
+                    [...list, ...data.list]
+                );
+            }
+            setHasMore(data.hasNextPage);
+        } catch (e) { }
+    }
+
+    const loadMore = async () => {
+        await load(pageNum + 1);
+        setPageNum(pageNum + 1);
+    }
+
+    const refresh = async () => {
+        await load(1, true);
+        setPageNum(1);
+    }
+
+    return { appointmentList, hasMore, loadMore, refresh };
 }
