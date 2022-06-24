@@ -33,6 +33,17 @@ export const addAppointment = (appointment: Appointment) => {
 }
 
 /**
+ * 取消预约
+ */
+export const cancelAppointment = (time: string) => { 
+    return request<Appointment>({
+        url: '/appointment/delete',
+        method: 'POST',
+        params: { time }
+    });
+}
+
+/**
  * 分页查询完整预约记录
  */
 export const getAppointmentList = (pageNum: number, pageSize: number) => { 

@@ -1,4 +1,4 @@
-import { Button, Card, Divider, InfiniteScroll, PullToRefresh, Space, Tag } from "antd-mobile";
+import { Button, Card, Divider, InfiniteScroll, PullToRefresh, Space, Tag, Toast } from "antd-mobile";
 import {
     RightOutline,
     SystemQRcodeOutline,
@@ -7,9 +7,10 @@ import {
 import { useAppointmentList } from "hooks/appointment";
 import React from "react";
 import { useNavigate } from "react-router";
+import { cancelAppointment } from "service/appointment";
 import styled from "styled-components";
 
-const initPageSize = 1;
+const initPageSize = 5;
 
 export const UserQRCode = React.memo(() => {
     // hooks
@@ -37,8 +38,15 @@ export const UserQRCode = React.memo(() => {
                     <div>预约地点：{appointment.address}</div>
                 </Space>
                 <Space align="center" justify="end" block>
-                    <Button color="success" shape="rounded"><SystemQRcodeOutline /> 展示二维码</Button>
-                    <Button color="danger" shape="rounded"><CloseCircleOutline /> 取消预约</Button>
+                    <Button color="success" shape="rounded">
+                        <SystemQRcodeOutline /> 展示二维码
+                    </Button>
+                    <Button color="danger" shape="rounded" onClick={() => {
+                        cancelAppointment(appointment.time)
+                            .then(() => { Toast.show('取消成功'); refresh(); }).catch(_ => { });
+                    }}>
+                        <CloseCircleOutline /> 取消预约
+                    </Button>
                 </Space>
             </Space>
         </Card>);
