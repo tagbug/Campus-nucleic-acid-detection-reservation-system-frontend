@@ -1,4 +1,4 @@
-import { Button, Card, Divider, InfiniteScroll, PullToRefresh, Space, Tag, Toast } from "antd-mobile";
+import { Button, Card, InfiniteScroll, Modal, PullToRefresh, Space, Tag, Toast } from "antd-mobile";
 import {
     RightOutline,
     SystemQRcodeOutline,
@@ -9,6 +9,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { cancelAppointment } from "service/appointment";
 import styled from "styled-components";
+import { QRCodeSVG } from 'qrcode.react';
 
 const initPageSize = 5;
 
@@ -38,7 +39,14 @@ export const UserQRCode = React.memo(() => {
                     <div>预约地点：{appointment.address}</div>
                 </Space>
                 <Space align="center" justify="end" block>
-                    <Button color="success" shape="rounded">
+                    <Button color="success" shape="rounded" onClick={() => {
+                        Modal.show({
+                            closeOnMaskClick: true,
+                            content: <Space block align="center" justify="center">
+                                <QRCodeSVG value={`${global.location.origin}/admin/result/add/${appointment.uid}&${appointment.time}`} />
+                            </Space>
+                        })
+                    }}>
                         <SystemQRcodeOutline /> 展示二维码
                     </Button>
                     <Button color="danger" shape="rounded" onClick={() => {
