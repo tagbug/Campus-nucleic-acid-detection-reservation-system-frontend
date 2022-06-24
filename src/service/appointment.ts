@@ -1,0 +1,33 @@
+import request from './axios';
+
+/**
+ * 查询可用采样点
+ */
+export const getSiteList = () => { 
+    return request<Site[]>({
+        url: '/site/queryAll',
+        method: 'GET',
+    });
+}
+
+/**
+ * 查询采样点可用采样时间段
+ */
+export const getSiteTimeRange = (siteId: number) => { 
+    return request<string[]>({
+        url: '/site/availableTime',
+        method: 'GET',
+        params: { siteId }
+    });
+}
+
+/**
+ * 新增预约记录
+ */
+export const addAppointment = (appointment: Appointment) => { 
+    return request<Appointment>({
+        url: '/appointment/add',
+        method: 'POST',
+        data: appointment
+    });
+}
