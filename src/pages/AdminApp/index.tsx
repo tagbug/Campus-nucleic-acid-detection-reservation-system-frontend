@@ -9,7 +9,6 @@ import {
     ExclamationCircleOutline,
     SetOutline,
 } from 'antd-mobile-icons'
-import { TabBarItemProps } from "antd-mobile/es/components/tab-bar";
 import React from "react";
 import { Outlet, useNavigate } from "react-router";
 import styled from "styled-components";
@@ -52,9 +51,8 @@ export const AdminApp = React.memo(() => {
             </Space>
         </Space>
         <List header="功能管理">
-            <List.Item onClick={()=>navigate('./site')}>预约点管理</List.Item>
-            <List.Item onClick={()=>navigate('./task')}>预约任务管理</List.Item>
-            <List.Item onClick={()=>navigate('./result')}>检测结果管理</List.Item>
+            <List.Item onClick={()=>navigate('/admin/site')}>预约点管理</List.Item>
+            <List.Item onClick={()=>navigate('/admin/result')}>检测结果管理</List.Item>
         </List>
         <List style={{ 'marginTop': '16px' }}>
             <List.Item prefix={<ExclamationCircleOutline />}>关于我们</List.Item>

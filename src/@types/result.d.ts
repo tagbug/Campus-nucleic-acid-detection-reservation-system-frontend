@@ -2,9 +2,9 @@
  * 检测结果模型
  */
 type TestResult = {
-    uid: number;
+    username: string;
     time: string;
-    siteId: number;
+    address: string;
     tester: string;
     result: 'negative' | 'positive';
 }

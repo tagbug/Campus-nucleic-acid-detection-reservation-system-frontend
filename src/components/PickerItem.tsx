@@ -1,6 +1,6 @@
 import { Input, Picker, Space } from "antd-mobile";
 import {
-    DownOutline
+    RightOutline
 } from "antd-mobile-icons";
 import { PickerColumn } from "antd-mobile/es/components/picker";
 import React, { useState } from "react";
@@ -35,7 +35,7 @@ export const PickerItem = React.memo(({ value, onChange, handleChange, name, pla
     return <Container>
         <Space block align="center" justify="between" onClick={handleClick} className="container">
             <Input name={name} placeholder={placeholder} value={value || pickerValue} disabled/>
-            <DownOutline />
+            <RightOutline />
         </Space>
     </Container>
 });
