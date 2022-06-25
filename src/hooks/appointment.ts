@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAppointmentList, getSiteList, getSiteTimeRange } from "service/appointment";
+import {getAppointmentCount, getAppointmentList, getSiteList, getSiteTimeRange} from "service/appointment";
 
 /**
  * 查询可用采样点
@@ -16,6 +16,23 @@ export const useSiteList = () => {
     useEffect(refresh, []);
 
     return { siteList, refresh };
+}
+
+/**
+ * 查询预约数总数
+ */
+export const useAppointmentCount = () => {
+    const [count,setCount] = useState<number>(0);
+
+    const refresh = () => {
+        getAppointmentCount().then(res => {
+            setCount(res.data)
+        }).catch(_ => { });
+    }
+
+    useEffect(refresh, []);
+
+    return { count };
 }
 
 /**

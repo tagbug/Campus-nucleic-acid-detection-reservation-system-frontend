@@ -53,3 +53,13 @@ export const getAppointmentList = (pageNum: number, pageSize: number) => {
         params: { pageNum, pageSize }
     });
 }
+
+/**
+ * 预约总数
+ */
+export const getAppointmentCount = () => {
+    return request<number>({
+        url: '/appointment/count',
+        method: 'GET',
+    });
+}

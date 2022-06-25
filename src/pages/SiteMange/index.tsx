@@ -1,32 +1,89 @@
 import {
     NavBar, Card, Toast, Button, SearchBar, Dialog, Form,
-    Input, Mask, PullToRefresh, Divider
+    Input, Mask, PullToRefresh, Divider, Space, InfiniteScroll
 } from "antd-mobile";
-import React,{useState} from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import {AntOutline, RightOutline, SendOutline} from "antd-mobile-icons";
 import {useNavigate} from "react-router";
 import {addSite, deleteSite} from "service/site";
 import {useAppointmentList} from "../../hooks/appointment";
+import {useTaskList} from "../../hooks/task";
+import {useSiteList} from "../../hooks/site";
+import {Debounce} from "util/HOF";
 
-const SiteArr: Site[] = [
-    {
-        id:4,
-        address:"江滨医院",
-    },
-    {
-        id:3,
-        address:"京江学院",
-    }
-]
-
+const initPageSize = 5;
 export const SiteMange = React.memo(() => {
 // hooks
     const navigate = useNavigate();
+    const {
+        hasMore,
+        loadMore,
+        siteList,
+        refresh,
+        setKeyword
+    } = useSiteList(initPageSize);
     const [visible, setVisible] = useState(false)
-    const onHeaderClick = (id:number,address:string) => {
-        navigate('/admin/site/'+id+'&'+address)
+    const onHeaderClick = (id: number, address: string) => {
+        navigate('/admin/site/' + id + '&' + address)
     }
+    const siteCards = siteList.map((site) =>
+        <div className="container">
+            <Card
+                key={site.id}
+                className="site"
+                title={
+                    <div style={{fontWeight: 'bold'}}>
+                        <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
+                        {site.address}
+                    </div>
+                }
+                extra={<RightOutline/>}
+                onHeaderClick={() => onHeaderClick(site.id, site.address)}
+                style={{borderRadius: '16px'}}
+            >
+                <div onClick={e => e.stopPropagation()} className="footer">
+                    <Button
+                        size='small'
+                        color='danger'
+                        onClick={async () => {
+                            const res = await Dialog.confirm({
+                                content: '是否确认删除',
+                            })
+                            if (res) {
+                                deleteSite(site.id).then(res => {
+                                    if (res.status == 200) {
+                                        Toast.show({
+                                            icon: 'success',
+                                            content: '删除成功',
+                                            position: 'bottom',
+                                        })
+                                        refresh()
+                                    } else {
+                                        Toast.show({
+                                            icon: 'fail',
+                                            content: '删除失败',
+                                            position: 'bottom',
+                                        })
+                                    }
+                                }).catch(_ => {
+                                });
+                            } else {
+                                Toast.show({
+                                    icon: 'fail',
+                                    content: '取消删除',
+                                    position: 'bottom',
+                                })
+                            }
+                        }}
+                    >
+                        删除采样点
+                    </Button>
+                </div>
+            </Card>
+        </div>
+    )
+
     return <AppContainer>
         <Mask visible={visible} onMaskClick={() => setVisible(false)}>
             <div className="overlayContent">
@@ -35,16 +92,17 @@ export const SiteMange = React.memo(() => {
                     mode="card"
                     onFinish={(values) => {
                         addSite(values.address).then(res => {
-                            if (res.status==200){
+                            if (res.status == 200) {
                                 Toast.show('添加成功');
-                                navigate("/admin/site");
+                                refresh()
                                 setVisible(false)
-                            }else{
+                            } else {
                                 Toast.show('添加失败');
                                 navigate("/admin/site");
                                 setVisible(false)
                             }
-                        }).catch(_ => { });
+                        }).catch(_ => {
+                        });
                     }}
                     footer={
                         <Button block type='submit' color='primary' size='large'>
@@ -77,9 +135,7 @@ export const SiteMange = React.memo(() => {
                     '--height': '32px',
                     '--padding-left': '12px',
                 }}
-                onSearch={val => {
-                    Toast.show(`你搜索了：${val}`)
-                }}
+                onChange={Debounce(setKeyword, 500)}
             />
 
             <Button size='small'
@@ -91,64 +147,14 @@ export const SiteMange = React.memo(() => {
                 添加采样点
             </Button>
         </div>
-        <PullToRefresh>
-        {SiteArr!==undefined ? SiteArr.map((site) =>
-            <div className="container">
-                <Card
-                    key={site.id}
-                    className="site"
-                    title={
-                        <div style={{fontWeight: 'bold'}}>
-                            <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
-                            {site.address}
-                        </div>
-                    }
-                    extra={<RightOutline/>}
-                    onHeaderClick={()=>onHeaderClick(site.id,site.address)}
-                    style={{borderRadius: '16px'}}
-                >
-                    <div onClick={e => e.stopPropagation()} className="footer">
-                        <Button
-                            size='small'
-                            color='danger'
-                            onClick={async () => {
-                                const res = await Dialog.confirm({
-                                    content: '是否确认删除',
-                                })
-                                if (res){
-                                    deleteSite(site.id).then(res => {
-                                        console.log(res)
-                                        if (res.status==200){
-                                            Toast.show({
-                                                icon: 'success',
-                                                content: '删除成功',
-                                                position: 'bottom',
-                                            })
-                                        }else{
-                                            Toast.show({
-                                                icon: 'fail',
-                                                content: '删除失败',
-                                                position: 'bottom',
-                                            })
-                                        }
-                                    }).catch(_ => { });
-                                }else{
-                                    Toast.show({
-                                        icon: 'fail',
-                                        content: '取消删除',
-                                        position: 'bottom',
-                                    })
-                                }
-                            }}
-                        >
-                            删除采样点
-                        </Button>
-                    </div>
-                </Card>
-            </div>
-            ):<></>
-        }
-            <Divider> --End-- </Divider>
+        <PullToRefresh onRefresh={refresh}>
+            <Space block direction="vertical">
+                {siteCards}
+            </Space>
+            <InfiniteScroll
+                loadMore={loadMore}
+                hasMore={hasMore}
+            />
         </PullToRefresh>
     </AppContainer>
 });
@@ -180,20 +186,22 @@ const AppContainer = styled.div`
     justify-content: center;
     align-items: center;
   }
-.overlayContent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 300px;
-  height: 300px;
-  margin-top: -150px;
-  margin-left: -150px;
-  background: white;
-  border-radius: 16px;
-}
+
+  .overlayContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    margin-top: -150px;
+    margin-left: -150px;
+    background: white;
+    border-radius: 16px;
+  }
+
   .search {
     margin-top: 12px;
     display: flex;
@@ -208,6 +216,7 @@ const AppContainer = styled.div`
     display: flex;
     justify-content: flex-end;
   }
+
   .container {
     padding: 15px;
   }

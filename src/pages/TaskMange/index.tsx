@@ -10,42 +10,105 @@ import {
     Form,
     Input,
     Mask,
-    DatePicker,
+     Space, InfiniteScroll,
 } from "antd-mobile";
 import React, {useState} from "react";
 import styled from "styled-components";
 import {AntOutline, SendOutline} from "antd-mobile-icons";
 import {useNavigate, useParams} from "react-router";
 import moment from "moment";
-import { deleteTask, updateTask} from "service/task";
+import {deleteTask, updateTask} from "service/task";
 import {DatePickerItem} from "components/DatePickerItem";
+import {useTaskList} from "../../hooks/task";
 
+const initPageSize = 5;
 export const TaskMange = React.memo(() => {
 // hooks
     const navigate = useNavigate();
     const {siteId, address} = useParams<{ siteId: string, address: string }>();
-    const [visible, setVisible] = useState(false)
-    const [visible1, setVisible1] = useState(false)
-    const [visible2, setVisible2] = useState(false)
+    const {
+        hasMore,
+        loadMore,
+        taskList,
+        refresh
+    } = useTaskList(initPageSize,Number(siteId));
+
+    const [maskVisible, setMaskVisible] = useState(false)
+    const [pickerVisible, setPickerVisible] = useState(false)
     const [form] = Form.useForm();
-    const TaskArr: SiteTask[] = [
-        {
-            address: "江滨医院",
-            tester: "钟佩祺",
-            timeStart: "2022-06-23 14:30",
-            timeEnd: "2022-06-23 18:30",
-            maxCapacity: 200
-        },
-        {
-            address: "江滨医院",
-            tester: "陈欣阳",
-            timeStart: "2022-06-23 14:30",
-            timeEnd: "2022-06-23 18:30",
-            maxCapacity: 200
-        }
-    ]
+    console.log(taskList)
+    const taskCards = taskList.map((task, idx) =>
+        <div className="container">
+            <Card
+                key={idx}
+                className="task"
+                title={
+                    <div style={{fontWeight: 'bold'}}>
+                        <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
+                        {task.address}
+                    </div>
+                }
+                style={{borderRadius: '16px'}}
+            >
+                <div className="content">
+                    <div className="message">
+                        <span style={{fontWeight: 'bold'}}>采样人员：</span>
+                        <span>{task.tester}</span>
+                    </div>
+                    <div className="message">
+                        <span style={{fontWeight: 'bold'}}>开始时间：</span>
+                        <span>{task.timeStart}</span>
+                    </div>
+                    <div className="message">
+                        <span style={{fontWeight: 'bold'}}>结束时间：</span>
+                        <span>{task.timeEnd}</span>
+                    </div>
+                    <div className="message">
+                        <span style={{fontWeight: 'bold'}}>日最大检测量：</span>
+                        <span>{task.maxCapacity}</span>
+                    </div>
+                </div>
+                <div onClick={e => e.stopPropagation()} className="footer">
+                    <Button
+                        size='middle'
+                        color='primary'
+                        onClick={() => {
+                            setMaskVisible(true)
+                            form.setFieldsValue({
+                                tester: task.tester,
+                                timeStart: task.timeStart,
+                                timeEnd: task.timeEnd,
+                                maxCapacity: task.maxCapacity
+                            })
+                        }}
+                    >
+                        修改采样任务
+                    </Button>
+                    <Button
+                        size='middle'
+                        color='danger'
+                        onClick={() => Dialog.confirm({
+                            content: '是否确认删除',
+                            onConfirm: async () => {
+                                deleteTask(Number(siteId), task.timeStart).then(_ => {
+                                    Toast.show({
+                                        icon: 'success',
+                                        content: '删除成功',
+                                        position: 'bottom',
+                                    })
+                                    refresh()
+                                }).catch(_ => {
+                                });
+                            },
+                        })}
+                    >
+                        删除采样任务
+                    </Button>
+                </div>
+            </Card></div>);
+
     return <AppContainer>
-        <Mask visible={visible} onMaskClick={() => setVisible(false)}>
+        <Mask visible={maskVisible} onMaskClick={() => setMaskVisible(false)}>
             <div className="overlayContent">
                 <Form
                     layout='horizontal'
@@ -65,9 +128,10 @@ export const TaskMange = React.memo(() => {
                             timeStart: values.timeStart
                         }).then(_ => {
                             Toast.show('修改成功')
-                            setVisible(false)
-                            navigate('/admin/site/' + siteId + '&' + address)
-                        }).catch(_ => {});
+                            setMaskVisible(false)
+                            refresh()
+                        }).catch(_ => {
+                        });
                     }
                     }
                 >
@@ -94,10 +158,10 @@ export const TaskMange = React.memo(() => {
                                label='结束时间'
                                rules={[{required: true, message: '内容不能为空'}]}
                                onClick={() => {
-                                   setVisible2(true)
+                                   setPickerVisible(true)
                                }}
                     >
-                        <DatePickerItem visible={visible2} setVisible={setVisible2} />
+                        <DatePickerItem visible={pickerVisible} setVisible={setPickerVisible}/>
                     </Form.Item>
                 </Form>
             </div>
@@ -131,76 +195,14 @@ export const TaskMange = React.memo(() => {
                 添加采样任务
             </Button>
         </div>
-        <PullToRefresh>
-        {TaskArr !== undefined ? TaskArr.map((task, idx) =>
-            <div className="container">
-                <Card
-                    key={idx}
-                    className="task"
-                    title={
-                        <div style={{fontWeight: 'bold'}}>
-                            <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
-                            {task.address}
-                        </div>
-                    }
-                    style={{borderRadius: '16px'}}
-                >
-                    <div className="content">
-                        <div className="message">
-                            <span style={{fontWeight: 'bold'}}>采样人员：</span>
-                            <span>{task.tester}</span>
-                        </div>
-                        <div className="message">
-                            <span style={{fontWeight: 'bold'}}>开始时间：</span>
-                            <span>{task.timeStart}</span>
-                        </div>
-                        <div className="message">
-                            <span style={{fontWeight: 'bold'}}>结束时间：</span>
-                            <span>{task.timeEnd}</span>
-                        </div>
-                        <div className="message">
-                            <span style={{fontWeight: 'bold'}}>日最大检测量：</span>
-                            <span>{task.maxCapacity}</span>
-                        </div>
-                    </div>
-                    <div onClick={e => e.stopPropagation()} className="footer">
-                        <Button
-                            size='middle'
-                            color='primary'
-                            onClick={() => {
-                                setVisible(true)
-                                form.setFieldsValue({
-                                    tester: task.tester,
-                                    timeStart: moment(new Date(task.timeStart)).format("yyyy-MM-DD HH:mm:ss"),
-                                    timeEnd: new Date(task.timeEnd),
-                                    maxCapacity: task.maxCapacity
-                                })
-                            }}
-                        >
-                            修改采样任务
-                        </Button>
-                        <Button
-                            size='middle'
-                            color='danger'
-                            onClick={() => Dialog.confirm({
-                                content: '是否确认删除',
-                                onConfirm: async () => {
-                                    deleteTask(Number(siteId),task.timeStart).then(_ =>{
-                                        Toast.show({
-                                            icon: 'success',
-                                            content: '删除成功',
-                                            position: 'bottom',
-                                        })
-                                        navigate("/admin/site/" + siteId + '&' + address)
-                                    }).catch(_ => {});
-                                },
-                            })}
-                        >
-                            删除采样任务
-                        </Button>
-                    </div>
-                </Card></div>) : <></>
-        }
+        <PullToRefresh onRefresh={refresh}>
+            <Space block direction="vertical">
+                {taskCards}
+            </Space>
+            <InfiniteScroll
+                loadMore={loadMore}
+                hasMore={hasMore}
+            />
             <Divider> --End-- </Divider>
         </PullToRefresh>
     </AppContainer>
@@ -241,6 +243,7 @@ const AppContainer = styled.div`
   .message {
     padding: 6px;
   }
+
   .overlayContent {
     position: absolute;
     top: 50%;
@@ -255,6 +258,7 @@ const AppContainer = styled.div`
     background: white;
     border-radius: 16px;
   }
+
   .body {
     flex: 1;
     display: flex;

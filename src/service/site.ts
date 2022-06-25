@@ -26,3 +26,11 @@ export const getAllSiteList = (pageNum:number,pageSize:number) => {
         params: {pageNum,pageSize}
     })
 }
+
+export const getAllSiteByAddress = (address:string,pageNum:number,pageSize:number) => {
+    return request<PageData<Site>>({
+        url: '/site/findByAddress',
+        method: 'GET',
+        params: {address,pageNum,pageSize}
+    })
+}

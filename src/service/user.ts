@@ -62,3 +62,13 @@ export const UpdateUserInfo = (userInfo: UserInfo) => {
         data: userInfo
     })
 }
+
+/**
+ * 用户总数
+ */
+export const getUserCount = () => {
+    return request<number>({
+        url: '/user/count',
+        method: 'GET',
+    });
+}
