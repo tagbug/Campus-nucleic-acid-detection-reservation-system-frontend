@@ -33,9 +33,9 @@ export const PickerItem = React.memo(({ value, onChange, handleChange, name, pla
     }
 
     return <Container>
-        <Space block align="center" justify="between" onClick={handleClick} className="container">
+        <Space block align="center" justify="around" onClick={handleClick} className="pickerItem-container">
             <Input name={name} placeholder={placeholder} value={value || pickerValue} disabled/>
-            <RightOutline />
+            <RightOutline color="rgb(204, 204, 204)" />
         </Space>
     </Container>
 });
@@ -45,11 +45,11 @@ const Container = styled.div`
         opacity: 1 !important;
     }
 
-    .container > *:first-child {
+    .pickerItem-container > *:first-child {
         flex: 1;
     }
 
-    .container > *:last-child {
+    .pickerItem-container > *:last-child {
         flex: 0;
     }
 `

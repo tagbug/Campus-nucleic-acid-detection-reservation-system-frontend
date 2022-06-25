@@ -62,7 +62,7 @@ export const routeConfig: RouteObject[] = [
                         path: 'result/',
                         children: [
                             {
-                                path: 'add',
+                                path: 'add/:userId&:time',
                                 element: <AddResult/>,
                             },
                             {

@@ -43,7 +43,9 @@ export const UserQRCode = React.memo(() => {
                         Modal.show({
                             closeOnMaskClick: true,
                             content: <Space block align="center" justify="center">
-                                <QRCodeSVG value={`${global.location.origin}/admin/result/add/${appointment.uid}&${appointment.time}`} />
+                                <QRCodeSVG
+                                    value={JSON.stringify({uid: appointment.uid, time: appointment.time})}
+                                />
                             </Space>
                         })
                     }}>
