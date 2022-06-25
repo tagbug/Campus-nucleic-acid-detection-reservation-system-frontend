@@ -50,7 +50,7 @@ export const AddResult = React.memo(() => {
             <Form.Header />
             <Form.Item
                 name='time'
-                label='采样时间'
+                label='采样开始时间'
                 initialValue={time}
                 rules={[{ required: true, message: '请重新扫码，采样时间不能为空' }]}
             >

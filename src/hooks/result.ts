@@ -10,31 +10,33 @@ export const useResultList = (initPageSize: number) => {
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     const load = async (pageNum: number, clear?: boolean) => {
-        try {
-            const data = (await getUserTestResult(pageNum || 1, initPageSize)).data;
-            if (clear) {
-                setResultList(data.list);
-            } else {
-                // 注意防止重复请求导致的数据冗余，如果出现重复数据，用下面的代码
-                // setAppointmentList(list =>
-                //     [...list.filter(item => !data.list.find(i => i.time === item.time)), ...data.list]
-                // );
-                setResultList(list =>
-                    [...list, ...data.list]
-                );
-            }
-            setHasMore(data.hasNextPage);
-        } catch (e) { }
+        const data = (await getUserTestResult(pageNum || 1, initPageSize)).data;
+        if (clear) {
+            setResultList(data.list);
+        } else {
+            // 注意防止重复请求导致的数据冗余，如果出现重复数据，用下面的代码
+            // setAppointmentList(list =>
+            //     [...list.filter(item => !data.list.find(i => i.time === item.time)), ...data.list]
+            // );
+            setResultList(list =>
+                [...list, ...data.list]
+            );
+        }
+        setHasMore(data.hasNextPage);
     }
 
     const loadMore = async () => {
-        await load(pageNum + 1);
-        setPageNum(pageNum + 1);
+        try {
+            await load(pageNum + 1);
+            setPageNum(pageNum + 1);
+        } catch (e) { }
     }
 
     const refresh = async () => {
-        await load(1, true);
-        setPageNum(1);
+        try {
+            await load(1, true);
+            setPageNum(1);
+        } catch (e) { }
     }
 
     return { resultList, hasMore, loadMore, refresh };
@@ -50,36 +52,38 @@ export const useAdminResultList = (initPageSize: number) => {
     const [keyword, setKeyword] = useState<string>('');
 
     const load = async (pageNum: number, clear?: boolean) => {
-        try {
-            let data: PageData<UserTestResult>;
-            if (keyword !== '') {
-                data = (await getAdminTestResultByAddress(keyword, pageNum || 1, initPageSize)).data;
-            } else {
-                data = (await getAdminTestResult(pageNum || 1, initPageSize)).data;
-            }
-            if (clear) {
-                setResultList(data.list);
-            } else {
-                // 注意防止重复请求导致的数据冗余，如果出现重复数据，用下面的代码
-                // setAppointmentList(list =>
-                //     [...list.filter(item => !data.list.find(i => i.time === item.time)), ...data.list]
-                // );
-                setResultList(list =>
-                    [...list, ...data.list]
-                );
-            }
-            setHasMore(data.hasNextPage);
-        } catch (e) { }
+        let data: PageData<UserTestResult>;
+        if (keyword !== '') {
+            data = (await getAdminTestResultByAddress(keyword, pageNum || 1, initPageSize)).data;
+        } else {
+            data = (await getAdminTestResult(pageNum || 1, initPageSize)).data;
+        }
+        if (clear) {
+            setResultList(data.list);
+        } else {
+            // 注意防止重复请求导致的数据冗余，如果出现重复数据，用下面的代码
+            // setAppointmentList(list =>
+            //     [...list.filter(item => !data.list.find(i => i.time === item.time)), ...data.list]
+            // );
+            setResultList(list =>
+                [...list, ...data.list]
+            );
+        }
+        setHasMore(data.hasNextPage);
     }
 
     const loadMore = async () => {
-        await load(pageNum + 1);
-        setPageNum(pageNum + 1);
+        try {
+            await load(pageNum + 1);
+            setPageNum(pageNum + 1);
+        } catch (e) { }
     }
 
     const refresh = async () => {
-        await load(1, true);
-        setPageNum(1);
+        try {
+            await load(1, true);
+            setPageNum(1);
+        } catch (e) { }
     }
 
     useEffect(() => { refresh() }, [keyword]);
