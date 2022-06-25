@@ -51,3 +51,14 @@ export const GetUserInfo = (uid: number) => {
         params: { uid }
     })
 }
+
+/**
+ * 用户信息更新接口
+ */
+export const UpdateUserInfo = (userInfo: UserInfo) => { 
+    return request<UserInfo>({
+        url: '/user/updateInfo',
+        method: 'POST',
+        data: userInfo
+    })
+}

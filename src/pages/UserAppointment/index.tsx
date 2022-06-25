@@ -19,7 +19,7 @@ export const UserAppointment = React.memo(() => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        if (userInfo) {
+        if (userInfo?.cardId) {
             form.setFieldsValue({
                 ...form.getFieldsValue(),
                 cardId: userInfo.cardId,
