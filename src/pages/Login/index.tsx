@@ -53,19 +53,19 @@ export const Login = React.memo(() => {
 
 const loginItems = <>
     <Form.Item label="用户名" name="username" rules={[{ required: true }]}>
-        <Input placeholder="请输入用户名" />
+        <Input placeholder="请输入用户名" autoComplete="username" />
     </Form.Item>
     <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-        <Input type="password" placeholder="请输入密码" />
+        <Input type="password" placeholder="请输入密码" autoComplete="current-password" />
     </Form.Item>
 </>
 
 const registerItems = <>
     <Form.Item label="用户名" name="username" rules={[{ required: true }]}>
-        <Input placeholder="请输入用户名" />
+        <Input placeholder="请输入用户名" autoComplete="username" />
     </Form.Item>
     <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-        <Input type="password" placeholder="请输入密码" />
+        <Input type="password" placeholder="请输入密码" autoComplete="new-password" />
     </Form.Item>
     <Form.Item label="确认密码" name="confirm" rules={[
         { required: true },
@@ -78,7 +78,7 @@ const registerItems = <>
             }
         })
     ]}>
-        <Input type="password" placeholder="请再次输入密码" />
+        <Input type="password" placeholder="请再次输入密码" autoComplete="new-password" />
     </Form.Item>
 </>
 

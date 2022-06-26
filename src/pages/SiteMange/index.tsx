@@ -1,14 +1,12 @@
 import {
     NavBar, Card, Toast, Button, SearchBar, Dialog, Form,
-    Input, Mask, PullToRefresh, Divider, Space, InfiniteScroll
+    Input, Mask, PullToRefresh, Space, InfiniteScroll
 } from "antd-mobile";
 import React, {useState} from "react";
 import styled from "styled-components";
 import {AntOutline, RightOutline, SendOutline} from "antd-mobile-icons";
 import {useNavigate} from "react-router";
 import {addSite, deleteSite} from "service/site";
-import {useAppointmentList} from "../../hooks/appointment";
-import {useTaskList} from "../../hooks/task";
 import {useSiteList} from "../../hooks/site";
 import {Debounce} from "util/HOF";
 
@@ -28,7 +26,7 @@ export const SiteMange = React.memo(() => {
         navigate('/admin/site/' + id + '&' + address)
     }
     const siteCards = siteList.map((site) =>
-        <div className="container">
+        <div className="container" key={site.id}>
             <Card
                 key={site.id}
                 className="site"
@@ -52,7 +50,7 @@ export const SiteMange = React.memo(() => {
                             })
                             if (res) {
                                 deleteSite(site.id).then(res => {
-                                    if (res.status == 200) {
+                                    if (res.status === 200) {
                                         Toast.show({
                                             icon: 'success',
                                             content: '删除成功',
@@ -92,7 +90,7 @@ export const SiteMange = React.memo(() => {
                     mode="card"
                     onFinish={(values) => {
                         addSite(values.address).then(res => {
-                            if (res.status == 200) {
+                            if (res.status === 200) {
                                 Toast.show('添加成功');
                                 refresh()
                                 setVisible(false)
@@ -161,7 +159,7 @@ export const SiteMange = React.memo(() => {
 
 
 const AppContainer = styled.div`
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #F7F7F7;

@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {getSiteCount, getTaskList} from "service/task";
-import {getAppointmentCount} from "service/appointment";
 
 /**
  * 查询采样任务

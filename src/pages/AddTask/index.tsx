@@ -1,15 +1,15 @@
-import {NavBar, Form, Input, Button, DatePicker, Toast} from "antd-mobile";
-import React, {useState} from "react";
+import { NavBar, Form, Input, Button, Toast } from "antd-mobile";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {SendOutline} from "antd-mobile-icons";
-import {useNavigate, useParams} from "react-router";
-import {addTask} from "service/task";
-import {DatePickerItem} from "components/DatePickerItem";
+import { SendOutline } from "antd-mobile-icons";
+import { useNavigate, useParams } from "react-router";
+import { addTask } from "service/task";
+import { DatePickerItem } from "components/DatePickerItem";
 
 export const AddTask = React.memo(() => {
-// hooks
+    // hooks
     const navigate = useNavigate();
-    const {siteId, address} = useParams<{ siteId: string, address: string }>();
+    const { siteId, address } = useParams<{ siteId: string, address: string }>();
     const now = new Date()
     const [visible, setVisible] = useState(false)
     const [visible1, setVisible1] = useState(false)
@@ -18,7 +18,7 @@ export const AddTask = React.memo(() => {
         <NavBar
             className="topBar"
             onBack={() => navigate(-1)}
-            right={<SendOutline fontSize="16px" onClick={() => navigate('/logout')}/>}
+            right={<SendOutline fontSize="16px" onClick={() => navigate('/logout')} />}
         >
             添加采样任务
         </NavBar>
@@ -40,53 +40,51 @@ export const AddTask = React.memo(() => {
                 }).then(_ => {
                     Toast.show('添加成功')
                     navigate("/admin/site/" + siteId + '&' + address)
-                }).catch(_ => {});
-            }
-            }
+                }).catch(_ => { });
+            }}
         >
             <Form.Header>添加采样任务</Form.Header>
             <Form.Item
                 name='tester'
                 label='采样人员'
-                rules={[{required: true, message: '内容不能为空'}]}
+                rules={[{ required: true, message: '内容不能为空' }]}
             >
-                <Input placeholder='请输入采样人员姓名'/>
+                <Input placeholder='请输入采样人员姓名' />
             </Form.Item>
-            <Form.Header/>
+            <Form.Header />
             <Form.Item name='address' label='地址' help='采样地点' initialValue={address}>
-                <Input disabled={true} value={address}/>
+                <Input disabled={true} value={address} />
             </Form.Item>
             <Form.Item name='siteId' hidden initialValue={siteId}>
-                <Input value={siteId}/>
+                <Input value={siteId} />
             </Form.Item>
-            <Form.Header/>
+            <Form.Header />
             <Form.Item name='timeStart'
-                       label='开始时间'
-                       rules={[{required: true, message: '内容不能为空'}]}
-                       onClick={() => {
-                           setVisible(true)
-                       }}
-                       initialValue={now}
+                label='开始时间'
+                rules={[{ required: true, message: '内容不能为空' }]}
+                onClick={() => {
+                    setVisible(true)
+                }}
+                initialValue={now}
             >
                 <DatePickerItem defaultValue={now} visible={visible} setVisible={setVisible} />
             </Form.Item>
-            <Form.Header/>
+            <Form.Header />
             <Form.Item name='timeEnd'
-                       label='结束时间'
-                       rules={[{required: true, message: '内容不能为空'}]}
-                       onClick={() => {
-                           setVisible1(true)
-                       }}
-                       initialValue={now}
+                label='结束时间'
+                rules={[{ required: true, message: '内容不能为空' }]}
+                onClick={() => {
+                    setVisible1(true)
+                }}
+                initialValue={now}
             >
                 <DatePickerItem defaultValue={now} visible={visible1} setVisible={setVisible1} />
             </Form.Item>
-            <Form.Header/>
-            <Form.Item name='maxCapacity' label='日最多检测量' rules={[{required: true, message: '内容不能为空'}]}>
-                <Input placeholder='请输入日最多检测量'/>
+            <Form.Header />
+            <Form.Item name='maxCapacity' label='日最多检测量' rules={[{ required: true, message: '内容不能为空' }]}>
+                <Input placeholder='请输入日最多检测量' />
             </Form.Item>
         </Form>
-
     </AppContainer>
 });
 

@@ -1,9 +1,8 @@
-import { NavBar, Form, Input, Button, DatePicker, Toast, Picker, Space } from "antd-mobile";
+import { NavBar, Form, Input, Button, Toast } from "antd-mobile";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { SendOutline } from "antd-mobile-icons";
 import { useNavigate, useParams } from "react-router";
-import moment from 'moment';
 import { addTestResult } from "service/testResult";
 import { NormalPickerItem } from "components/NormalPickerItem";
 
@@ -11,9 +10,7 @@ export const AddResult = React.memo(() => {
     // hooks
     const navigate = useNavigate();
     const { userId, time } = useParams<{ userId: string, time: string }>();
-    const [visible, setVisible] = useState(false)
     const [visible1, setVisible1] = useState(false)
-    const [value, setValue] = useState<(string | null)[]>([])
 
     return <AppContainer>
         <NavBar

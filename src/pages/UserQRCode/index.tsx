@@ -31,6 +31,7 @@ export const UserQRCode = React.memo(() => {
                 <Tag color="success" round>已预约</Tag>
             </Space>}
             extra={<RightOutline />}
+            key={appointment.time}
         >
             <Space direction="vertical" block>
                 <Space direction="vertical" block>

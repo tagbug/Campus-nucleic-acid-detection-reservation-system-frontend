@@ -6,65 +6,63 @@ import {
     Button,
     SearchBar,
     PullToRefresh,
-    Divider,
     Form,
     Input,
     Mask,
-     Space, InfiniteScroll,
+    Space, InfiniteScroll,
 } from "antd-mobile";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {AntOutline, SendOutline} from "antd-mobile-icons";
-import {useNavigate, useParams} from "react-router";
-import moment from "moment";
-import {deleteTask, updateTask} from "service/task";
-import {DatePickerItem} from "components/DatePickerItem";
-import {useTaskList} from "../../hooks/task";
+import { AntOutline, SendOutline } from "antd-mobile-icons";
+import { useNavigate, useParams } from "react-router";
+import { deleteTask, updateTask } from "service/task";
+import { DatePickerItem } from "components/DatePickerItem";
+import { useTaskList } from "../../hooks/task";
 
 const initPageSize = 5;
 export const TaskMange = React.memo(() => {
-// hooks
+    // hooks
     const navigate = useNavigate();
-    const {siteId, address} = useParams<{ siteId: string, address: string }>();
+    const { siteId, address } = useParams<{ siteId: string, address: string }>();
     const {
         hasMore,
         loadMore,
         taskList,
         refresh
-    } = useTaskList(initPageSize,Number(siteId));
+    } = useTaskList(initPageSize, Number(siteId));
 
     const [maskVisible, setMaskVisible] = useState(false)
     const [pickerVisible, setPickerVisible] = useState(false)
     const [form] = Form.useForm();
     console.log(taskList)
     const taskCards = taskList.map((task, idx) =>
-        <div className="container">
+        <div className="container" key={task.timeStart + task.timeEnd}>
             <Card
                 key={idx}
                 className="task"
                 title={
-                    <div style={{fontWeight: 'bold'}}>
-                        <AntOutline style={{marginRight: '4px', color: '#1677ff'}}/>
+                    <div style={{ fontWeight: 'bold' }}>
+                        <AntOutline style={{ marginRight: '4px', color: '#1677ff' }} />
                         {task.address}
                     </div>
                 }
-                style={{borderRadius: '16px'}}
+                style={{ borderRadius: '16px' }}
             >
                 <div className="content">
                     <div className="message">
-                        <span style={{fontWeight: 'bold'}}>采样人员：</span>
+                        <span style={{ fontWeight: 'bold' }}>采样人员：</span>
                         <span>{task.tester}</span>
                     </div>
                     <div className="message">
-                        <span style={{fontWeight: 'bold'}}>开始时间：</span>
+                        <span style={{ fontWeight: 'bold' }}>开始时间：</span>
                         <span>{task.timeStart}</span>
                     </div>
                     <div className="message">
-                        <span style={{fontWeight: 'bold'}}>结束时间：</span>
+                        <span style={{ fontWeight: 'bold' }}>结束时间：</span>
                         <span>{task.timeEnd}</span>
                     </div>
                     <div className="message">
-                        <span style={{fontWeight: 'bold'}}>日最大检测量：</span>
+                        <span style={{ fontWeight: 'bold' }}>日最大检测量：</span>
                         <span>{task.maxCapacity}</span>
                     </div>
                 </div>
@@ -139,29 +137,29 @@ export const TaskMange = React.memo(() => {
                     <Form.Item
                         name='tester'
                         label='采样人员'
-                        rules={[{required: true, message: '内容不能为空'}]}
+                        rules={[{ required: true, message: '内容不能为空' }]}
                     >
-                        <Input placeholder='请输入采样人员姓名'/>
+                        <Input placeholder='请输入采样人员姓名' />
                     </Form.Item>
-                    <Form.Header/>
-                    <Form.Item name='maxCapacity' label='日最大检测量' rules={[{required: true, message: '内容不能为空'}]}>
-                        <Input placeholder='请输入日最大检测量'/>
+                    <Form.Header />
+                    <Form.Item name='maxCapacity' label='日最大检测量' rules={[{ required: true, message: '内容不能为空' }]}>
+                        <Input placeholder='请输入日最大检测量' />
                     </Form.Item>
-                    <Form.Header/>
+                    <Form.Header />
                     <Form.Item name='timeStart'
-                               label='开始时间'
+                        label='开始时间'
                     >
-                        <Input disabled={true}/>
+                        <Input disabled={true} />
                     </Form.Item>
-                    <Form.Header/>
+                    <Form.Header />
                     <Form.Item name='timeEnd'
-                               label='结束时间'
-                               rules={[{required: true, message: '内容不能为空'}]}
-                               onClick={() => {
-                                   setPickerVisible(true)
-                               }}
+                        label='结束时间'
+                        rules={[{ required: true, message: '内容不能为空' }]}
+                        onClick={() => {
+                            setPickerVisible(true)
+                        }}
                     >
-                        <DatePickerItem visible={pickerVisible} setVisible={setPickerVisible}/>
+                        <DatePickerItem visible={pickerVisible} setVisible={setPickerVisible} />
                     </Form.Item>
                 </Form>
             </div>
@@ -169,7 +167,7 @@ export const TaskMange = React.memo(() => {
         <NavBar
             className="topBar"
             onBack={() => navigate(-1)}
-            right={<SendOutline fontSize="16px" onClick={() => navigate('/logout')}/>}
+            right={<SendOutline fontSize="16px" onClick={() => navigate('/logout')} />}
         >
             预约任务管理
         </NavBar>
@@ -187,10 +185,10 @@ export const TaskMange = React.memo(() => {
             />
 
             <Button size='small'
-                    color='primary'
-                    onClick={() => {
-                        navigate('/admin/site/add/' + siteId + '&' + address)
-                    }}
+                color='primary'
+                onClick={() => {
+                    navigate('/admin/site/add/' + siteId + '&' + address)
+                }}
             >
                 添加采样任务
             </Button>
@@ -203,14 +201,13 @@ export const TaskMange = React.memo(() => {
                 loadMore={loadMore}
                 hasMore={hasMore}
             />
-            <Divider> --End-- </Divider>
         </PullToRefresh>
     </AppContainer>
 });
 
 
 const AppContainer = styled.div`
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #F7F7F7;

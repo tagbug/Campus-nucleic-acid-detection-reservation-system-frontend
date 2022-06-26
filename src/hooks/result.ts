@@ -86,6 +86,7 @@ export const useAdminResultList = (initPageSize: number) => {
         } catch (e) { }
     }
 
+    // eslint-disable-next-line
     useEffect(() => { refresh() }, [keyword]);
 
     return { setKeyword, resultList, hasMore, loadMore, refresh };

@@ -27,7 +27,7 @@ export const UserAppointment = React.memo(() => {
                 sex: parseInt(userInfo.cardId.substring(16, 17)) % 2 === 1 ? 'male' : 'female'
             });
         }
-    }, [userInfo]);
+    }, [userInfo, form]);
 
     return <Form
         form={form}

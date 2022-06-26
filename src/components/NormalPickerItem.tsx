@@ -1,6 +1,5 @@
-import {DatePicker, Picker} from "antd-mobile";
+import {Picker} from "antd-mobile";
 import React from "react";
-import moment from "moment";
 import {PickerColumn} from "antd-mobile/es/components/picker";
 
 type NormalPickerItemProps = {

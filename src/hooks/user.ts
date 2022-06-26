@@ -1,6 +1,5 @@
-import {useEffect, useState} from "react"
-import {getUserCount, GetUserInfo} from "service/user";
-import {getAppointmentCount} from "service/appointment";
+import { useEffect, useState } from "react"
+import { getUserCount, GetUserInfo } from "service/user";
 
 /**
  * 获取用户信息
@@ -13,14 +12,13 @@ export const useUserInfo = (uid: number | undefined, callback?: (userInfo: UserI
             GetUserInfo(uid).then(res => {
                 setUserInfo(res.data);
                 callback?.(res.data);
-            }).catch(_ => {
-            });
+            }).catch(_ => { });
         }
     };
 
-    useEffect(refresh, [uid]);
+    useEffect(refresh, [uid, callback]);
 
-    return {userInfo, refresh};
+    return { userInfo, refresh };
 }
 
 /**
@@ -38,5 +36,5 @@ export const useAppointmentCount = () => {
 
     useEffect(refresh, []);
 
-    return {count};
+    return { count };
 }

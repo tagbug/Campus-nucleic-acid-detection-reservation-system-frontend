@@ -28,6 +28,7 @@ export const UserResult = React.memo(() => {
                     <Tag color="danger" round>阳性</Tag>}
             </Space>}
             extra={<RightOutline />}
+            key={result.time}
         >
             <Space direction="vertical" block>
                 <Space direction="vertical" block>
