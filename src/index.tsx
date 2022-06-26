@@ -15,13 +15,11 @@ const Index = () => {
 // 使用ReactDOM.createRoot开启Fiber架构的Concurrent Mode
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <Index />
-                </PersistGate>
-            </Provider>
-        </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <Index />
+            </PersistGate>
+        </Provider>
+    </BrowserRouter>
 );

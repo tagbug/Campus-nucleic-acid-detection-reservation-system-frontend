@@ -41,6 +41,7 @@ export const useSiteList = (initPageSize: number) => {
             setPageNum(1);
         }catch (e) {}
     }
+    
     useEffect(() => { refresh() }, [keyword]);
 
     return { setKeyword,siteList, hasMore, loadMore, refresh };

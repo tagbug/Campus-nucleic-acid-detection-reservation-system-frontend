@@ -1,16 +1,13 @@
-import {Divider, List, NavBar, Space, TabBar, Tag} from "antd-mobile";
+import {List, NavBar, Space, Tag} from "antd-mobile";
 import {
-    AppOutline,
     MessageOutline,
-    UnorderedListOutline,
-    UserOutline,
     TeamFill,
     SendOutline,
     ExclamationCircleOutline,
     SetOutline,
 } from 'antd-mobile-icons'
-import React, {useState} from "react";
-import {Outlet, useNavigate} from "react-router";
+import React from "react";
+import {useNavigate} from "react-router";
 import styled from "styled-components";
 import {useAppointmentCount} from "../../hooks/appointment";
 import {useSiteCount} from "../../hooks/task";
@@ -18,9 +15,10 @@ import {useSiteCount} from "../../hooks/task";
 export const AdminApp = React.memo(() => {
     // hooks
     const navigate = useNavigate();
-    const appointmentCount = useAppointmentCount()
-    const siteCount = useSiteCount()
-    const userCount = useAppointmentCount()
+    const appointmentCount = useAppointmentCount();
+    const siteCount = useSiteCount();
+    const userCount = useAppointmentCount();
+    
     return <AppContainer>
         <NavBar
             className="topBar"
