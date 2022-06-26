@@ -10,5 +10,5 @@ export const LoginRedirect = () => {
     let userCache = useSelector<RootState, User | null>(state => state.user.userCache);
     console.log({ userCache: userCache })
 
-    return <Navigate to={userCache ? (userCache.type === 'admin' ? '/admin' : '/user') : '/user'} />
+    return <Navigate to={userCache ? (userCache.type === 'admin' ? '/admin' : '/user') : '/login'} />
 }

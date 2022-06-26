@@ -16,7 +16,8 @@ export const useUserInfo = (uid: number | undefined, callback?: (userInfo: UserI
         }
     };
 
-    useEffect(refresh, [uid, callback]);
+    // eslint-disable-next-line
+    useEffect(refresh, [uid]);
 
     return { userInfo, refresh };
 }
@@ -30,8 +31,7 @@ export const useAppointmentCount = () => {
     const refresh = () => {
         getUserCount().then(res => {
             setCount(res.data)
-        }).catch(_ => {
-        });
+        }).catch(_ => { });
     }
 
     useEffect(refresh, []);
