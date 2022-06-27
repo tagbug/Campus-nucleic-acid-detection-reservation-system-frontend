@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Radio, Space, Tag, Toast } from "antd-mobile";
+import { Button, Ellipsis, Form, Input, Modal, Radio, Space, Tag, Toast } from "antd-mobile";
 import {
     TeamFill
 } from "antd-mobile-icons";
@@ -25,7 +25,10 @@ export const UserHome = React.memo(() => {
         <Space block className="user" align="center">
             <TeamFill fontSize="32px" />
             <Space className="desc" >
-                <div>{userInfo?.name}</div>
+                <Ellipsis
+                    content={userInfo?.name!}
+                    direction="end"
+                />
                 <Tag
                     color="success"
                     fill="outline"
@@ -112,9 +115,20 @@ const Container = styled.div`
     min-height: 100%;
 
     .user {
+        width: 100%;
         padding: 32px;
         background-color: #2499f2;
         color: #fff;
+    }
+
+    .user > *:nth-child(2) {
+        flex: 1;
+        width: 100%;
+    }
+
+    .user > *:nth-child(3) {
+        margin-left: 10px;
+        flex-shrink: 0;
     }
 
     .user .desc {
@@ -122,6 +136,15 @@ const Container = styled.div`
         margin-left: 16px;
         font-size: 16px;
         font-weight: bold;
+    }
+
+    .desc {
+        width: 100%;
+    }
+
+    .desc > *:first-child {
+        width: 100%;
+        flex: 1;
     }
     
     .logout-button {
