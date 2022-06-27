@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import { RootState } from "redux/store";
 import styled from "styled-components";
 import { scanQR, testedBase64 } from 'components/QRCodeReader';
-import { UpdateUserInfo } from "service/user";
+import {UpdateUserInfo, UserUpdatePassword} from "service/user";
 
 export const UserHome = React.memo(() => {
     // hooks
@@ -33,8 +33,18 @@ export const UserHome = React.memo(() => {
                 >用户</Tag>
             </Space>
             <Button color="success" size="small" onClick={() => {
-                scanQR(testedBase64).then(res => alert(res));
-            }}>扫码测试</Button>
+                const handler = Modal.show({
+                    title: '修改密码',
+                    content: UpdatePwd(values => {
+                        UserUpdatePassword(values.oriPassword,values.newPassword).then(() => {
+                            Toast.show('修改成功');
+                            handler.close();
+                            refresh();
+                        }).catch(_ => { });
+                    }),
+                    closeOnMaskClick: true,
+                })
+            }}>修改密码</Button>
             <Button color="primary" size="small" onClick={() => {
                 const handler = Modal.show({
                     title: '修改个人信息',
@@ -105,6 +115,33 @@ const UpdateInfo = (onFinish?: ((values: any) => void)) => <Form
     </Form.Item>
     <Form.Item>
         <Button color="primary" type="submit" shape="rounded" block>提交</Button>
+    </Form.Item>
+</Form>
+
+const UpdatePwd = (onFinish?: ((values: any) => void)) => <Form
+    onFinish={onFinish}
+>
+    <Form.Item name="oriPassword" label="旧密码" rules={[{ required: true }]}>
+        <Input placeholder="请输入旧密码" />
+    </Form.Item>
+    <Form.Item name="newPassword" label="新密码" rules={[{ required: true }]}>
+        <Input type="password" placeholder="请输入新密码" />
+    </Form.Item>
+    <Form.Item label="确认密码" name="confirm" rules={[
+        { required: true },
+        ({ getFieldValue }) => ({
+            validator(_, value) {
+                if (!value || getFieldValue('newPassword') === value) {
+                    return Promise.resolve();
+                }
+                return Promise.reject('两次输入的密码不一致');
+            }
+        })
+    ]}>
+        <Input type="password" placeholder="请再次输入密码" autoComplete="new-password" />
+    </Form.Item>
+    <Form.Item>
+        <Button color="primary" type="submit" shape="rounded" block>确认</Button>
     </Form.Item>
 </Form>
 
