@@ -1,6 +1,5 @@
 import { Button, Card, InfiniteScroll, Modal, PullToRefresh, Space, Tag, Toast } from "antd-mobile";
 import {
-    RightOutline,
     SystemQRcodeOutline,
     CloseCircleOutline
 } from "antd-mobile-icons";
@@ -30,7 +29,6 @@ export const UserQRCode = React.memo(() => {
                 <div>{appointment.name}</div>
                 <Tag color="success" round>已预约</Tag>
             </Space>}
-            extra={<RightOutline />}
             key={appointment.time}
         >
             <Space direction="vertical" block>

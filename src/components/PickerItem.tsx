@@ -34,7 +34,7 @@ export const PickerItem = React.memo(({ value, onChange, handleChange, name, pla
 
     return <Container>
         <Space block align="center" justify="around" onClick={handleClick} className="pickerItem-container">
-            <Input name={name} placeholder={placeholder} value={value || pickerValue} disabled/>
+            <Input name={name} placeholder={placeholder} value={value === undefined ? pickerValue : value} disabled />
             <RightOutline color="rgb(204, 204, 204)" />
         </Space>
     </Container>

@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { RootState } from "redux/store";
 import styled from "styled-components";
-import { scanQR, testedBase64 } from 'components/QRCodeReader';
 import {UpdateUserInfo, UserUpdatePassword} from "service/user";
 
 export const UserHome = React.memo(() => {
@@ -29,11 +28,11 @@ export const UserHome = React.memo(() => {
                     content={userInfo?.name!}
                     direction="end"
                 />
-                <Tag
+                {/* <Tag
                     color="success"
                     fill="outline"
                     style={{ '--background-color': '#c8f7c5' }}
-                >用户</Tag>
+                >用户</Tag> */}
             </Space>
             <Button color="success" size="small" onClick={() => {
                 const handler = Modal.show({

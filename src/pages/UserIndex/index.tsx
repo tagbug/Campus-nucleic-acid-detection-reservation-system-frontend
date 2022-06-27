@@ -1,14 +1,27 @@
-import { Space } from "antd-mobile";
+import { Space, Toast } from "antd-mobile";
+import { useUserInfo } from "hooks/user";
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { RootState } from "redux/store";
 import styled from "styled-components";
 
 export const UserIndex = React.memo(() => {
+    // hooks
     const navigate = useNavigate();
+    let userCache = useSelector<RootState, User | null>(state => state.user.userCache);
+    const { userInfo } = useUserInfo(userCache?.id);
 
     return <Container>
         <div className="card-container">
-            <Space className="card blue" direction="vertical" onClick={() => navigate('/user/appointment')}>
+            <Space className="card blue" direction="vertical" onClick={() => {
+                if (userInfo?.cardId && userInfo?.sex) {
+                    navigate('/user/appointment');
+                } else {
+                    Toast.show('请先完善个人信息');
+                    navigate('/user/home');
+                }
+            }}>
                 <div style={{ fontSize: '22px' }}>核酸检测预约</div>
                 <div>填写个人信息进行核酸检测</div>
             </Space>

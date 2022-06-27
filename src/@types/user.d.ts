@@ -14,6 +14,6 @@ type User = {
 type UserInfo = {
     uid: number;
     name: string;
-    cardId: string;
-    sex: 'male' | 'female';
+    cardId?: string;
+    sex?: 'male' | 'female';
 }

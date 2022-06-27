@@ -22,6 +22,7 @@ export const UserAppointment = React.memo(() => {
         if (userInfo?.cardId) {
             form.setFieldsValue({
                 ...form.getFieldsValue(),
+                name: userInfo.name,
                 cardId: userInfo.cardId,
                 age: new Date().getFullYear() - parseInt(userInfo.cardId.substring(6, 10)),
                 sex: parseInt(userInfo.cardId.substring(16, 17)) % 2 === 1 ? 'male' : 'female'
@@ -86,14 +87,28 @@ export const UserAppointment = React.memo(() => {
                 </Space>
             </Radio.Group>
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={[{ required: true }]}>
+        <Form.Item label="联系电话" name="phone" rules={[
+            { required: true },
+            {
+                validator(_, value) {
+                    if (!value || !/^1[3456789]\d{9}$/.test(value)) {
+                        return Promise.reject('请输入正确的手机号码');
+                    }
+                    return Promise.resolve();
+                }
+            }
+        ]}>
             <Input type="number" placeholder="请输入联系电话" />
         </Form.Item>
         <Form.Item label="采样地点" name="appointmentSite" rules={[{ required: true }]} >
             <PickerItem
                 placeholder="选择采样地点"
                 columns={[siteList.map(v => ({ label: v.address, value: v.address }))]}
-                handleChange={v => setSiteId(siteList.find(v2 => v2.address === v)?.id)}
+                handleChange={v => {
+                    setSiteId(siteList.find(v2 => v2.address === v)?.id);
+                    const values = form.getFieldsValue();
+                    form.setFieldsValue({ ...values, appointmentTime: '' });
+                }}
             />
         </Form.Item>
         <Form.Item label="采样时间" name="appointmentTime" rules={[{ required: true }]}>
